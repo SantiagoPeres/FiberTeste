@@ -7,13 +7,25 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
+	_ "github.com/gofiber/swagger/api/docs"
 	"github.com/gofiber/template/html"
 	_ "github.com/lib/pq"
 )
 
+// @title Fiber API
+// @version 1.0
+// @description This is a sample swagger for Fiber
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email fiber@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:3000
+// @BasePath /
 func main() {
 
-	connStr := "postgresql://postgres:157000@localhost:5432/postgres?sslmode=disable" // Conecta ao banco de dados
+	connStr := "postgresql://postgres:test123@localhost:5432/postgres?sslmode=disable" // Conecta ao banco de dados
 
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -25,6 +37,19 @@ func main() {
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
+
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
+
+	app.Get("/swagger/*", swagger.New(swagger.Config{
+		URL:          "http://example.com/doc.json",
+		DeepLinking:  false,
+		DocExpansion: "none",
+		OAuth: &swagger.OAuthConfig{
+			AppName:  "OAuth Provider",
+			ClientId: "21bb4edc-05a7-4afc-86f1-2e151e4ba6e2",
+		},
+		OAuth2RedirectUrl: "http://localhost:8080/swagger/oauth2-redirect.html",
+	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return indexHandler(c, db)
@@ -44,7 +69,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3300"
+		port = "3000"
 	}
 	log.Fatalln(app.Listen(fmt.Sprintf(":%v", port)))
 
@@ -57,11 +82,11 @@ func indexHandler(c *fiber.Ctx, db *sql.DB) error {
 	var res string
 	var todos []string
 	rows, err := db.Query("SELECT * FROM todos")
-	defer rows.Close()
 
 	if err != nil {
 		log.Fatalln(err)
 		c.JSON("An error occured")
+		defer db.Close()
 	}
 	for rows.Next() {
 		rows.Scan(&res)
@@ -75,6 +100,18 @@ func indexHandler(c *fiber.Ctx, db *sql.DB) error {
 type todo struct {
 	Item string
 }
+
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /api/postHandler [post]
 
 func postHandler(c *fiber.Ctx, db *sql.DB) error {
 	newTodo := todo{}
@@ -94,6 +131,17 @@ func postHandler(c *fiber.Ctx, db *sql.DB) error {
 	return c.Redirect("/")
 }
 
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /api/postHandler [get]
 func putHandler(c *fiber.Ctx, db *sql.DB) error {
 	olditem := c
 	c.Query("olditem")
@@ -102,6 +150,17 @@ func putHandler(c *fiber.Ctx, db *sql.DB) error {
 	return c.Redirect("/")
 }
 
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /api/postHandler [post]
 func deleteHandler(c *fiber.Ctx, db *sql.DB) error {
 	todoToDelete := c.Query("item")
 	db.Exec("DELETE from todo WHERE item=$1", todoToDelete)
