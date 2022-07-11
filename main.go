@@ -6,9 +6,9 @@ import (
 	"log"
 	"os"
 
+	_ "github.com/SantiagoPeres/FiberTest/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
-	_ "github.com/gofiber/swagger/api/docs"
 	"github.com/gofiber/template/html"
 	_ "github.com/lib/pq"
 )
