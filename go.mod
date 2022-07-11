@@ -2,7 +2,7 @@ module FiberTest
 
 go 1.18
 
-require github.com/gofiber/fiber/v2 v2.34.1
+require github.com/gofiber/fiber/v2 v2.35.0
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
