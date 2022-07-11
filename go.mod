@@ -1,4 +1,4 @@
-module fiber-test
+module FiberTest
 
 go 1.18
 
