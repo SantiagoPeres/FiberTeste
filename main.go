@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	_ "github.com/SantiagoPeres/FiberTest/docs"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/gofiber/template/html"
@@ -22,7 +21,7 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:3000
-// @BasePath /
+// @BaseP
 func main() {
 
 	connStr := "postgresql://postgres:test123@localhost:5432/postgres?sslmode=disable" // Conecta ao banco de dados
@@ -80,8 +79,8 @@ func main() {
 
 func indexHandler(c *fiber.Ctx, db *sql.DB) error {
 	var res string
-	var todos []string
-	rows, err := db.Query("SELECT * FROM todos")
+	var sm_users []string
+	rows, err := db.Query("SELECT * FROM sm_users")
 
 	if err != nil {
 		log.Fatalln(err)
@@ -90,15 +89,15 @@ func indexHandler(c *fiber.Ctx, db *sql.DB) error {
 	}
 	for rows.Next() {
 		rows.Scan(&res)
-		todos = append(todos, res)
+		sm_users = append(sm_users, res)
 	}
 	return c.Render("index", fiber.Map{
-		"Todos": todos,
+		"sm_users": sm_users,
 	})
 }
 
-type todo struct {
-	Item string
+type sm_users struct {
+	username string
 }
 
 // @BasePath /api/v1
@@ -114,15 +113,15 @@ type todo struct {
 // @Router /api/postHandler [post]
 
 func postHandler(c *fiber.Ctx, db *sql.DB) error {
-	newTodo := todo{}
-	if err := c.BodyParser(&newTodo); err != nil {
+	newsm_users := sm_users{}
+	if err := c.BodyParser(&newsm_users); err != nil {
 		log.Printf("An error occured: %v", err)
 
 		return c.SendString(err.Error())
 	}
-	fmt.Printf("%v", newTodo)
-	if newTodo.Item != "" {
-		_, err := db.Exec("INSERT into todos VALUES ($1)", newTodo.Item)
+	fmt.Printf("%v", newsm_users)
+	if newsm_users.username != "" {
+		_, err := db.Exec("INSERT into sm_users VALUES ($1)", newsm_users.username)
 		if err != nil {
 			log.Fatalf("An error occured while executing query: %v", err)
 		}
@@ -143,10 +142,10 @@ func postHandler(c *fiber.Ctx, db *sql.DB) error {
 // @Success 200 {string} Helloworld
 // @Router /api/postHandler [get]
 func putHandler(c *fiber.Ctx, db *sql.DB) error {
-	olditem := c
-	c.Query("olditem")
-	newitem := c.Query("newitem")
-	db.Exec("UPDATE todos SET item=$1 WHERE item=$2", newitem, olditem)
+	oldusername := c
+	c.Query("oldusername")
+	newusername := c.Query("newusername")
+	db.Exec("UPDATE sm_userss SET username=$1 WHERE username=$2", newusername, oldusername)
 	return c.Redirect("/")
 }
 
@@ -162,7 +161,7 @@ func putHandler(c *fiber.Ctx, db *sql.DB) error {
 // @Success 200 {string} Helloworld
 // @Router /api/postHandler [post]
 func deleteHandler(c *fiber.Ctx, db *sql.DB) error {
-	todoToDelete := c.Query("item")
-	db.Exec("DELETE from todo WHERE item=$1", todoToDelete)
+	sm_usersToDelete := c.Query("username")
+	db.Exec("DELETE from sm_users WHERE username=$1", sm_usersToDelete)
 	return c.SendString("deleted")
 }
