@@ -3,13 +3,13 @@ body {
    line-height: 1.6;
 }
 
-.add-todo-input,
-.edit-todo-input {
+.add-sm_users-input,
+.edit-sm_users-input {
    outline: none;
 }
 
-.add-todo-input:focus,
-.edit-todo-input:focus {
+.add-sm_users-input:focus,
+.edit-sm_users-input:focus {
    border: none !important;
    box-shadow: none !important;
 }
@@ -19,18 +19,18 @@ body {
    font-size: 0.8rem;
 }
 
-.edit-todo-input {
+.edit-sm_users-input {
    font-size: 1.7rem !important;
 }
 
-.todo-actions {
+.sm_users-actions {
    visibility: hidden !important;
 }
 
-.todo-item:hover .todo-actions {
+.sm_users-username:hover .sm_users-actions {
    visibility: visible !important;
 }
 
-.todo-item.editing .todo-actions .edit-icon {
+.sm_users-username.editing .sm_users-actions .edit-icon {
    display: none !important;
 }
