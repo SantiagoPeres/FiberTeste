@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	_ "go-swag-demo-api/docs"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/gofiber/template/html"
@@ -21,7 +23,8 @@ import (
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:3000
-// @BaseP
+// @BasePath /
+
 func main() {
 
 	connStr := "postgresql://postgres:test123@localhost:5432/postgres?sslmode=disable" // Conecta ao banco de dados
