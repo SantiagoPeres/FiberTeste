@@ -34,7 +34,7 @@
         <div class="row m-1 p-3">
             <div class="col col-11 mx-auto">
                 <form action="/" method="POST"
-                    class="row bg-white rounded shadow-sm p-2 add-sm_users-wrapper align-username-center justify-content-center">
+                    class="row bg-white rounded shadow-sm p-2 add-sm_users-wrapper align-items-center justify-content-center">
                     <div class="col">
                         <input name="username"
                             class="form-control form-control-lg border-0 add-sm_users-input bg-transparent rounded"
@@ -50,10 +50,10 @@
         <!-- sm_users list section -->
         <div class="row mx-1 px-5 pb-3 w-80">
             <div class="col mx-auto">
-                <!-- sm_users username-->
-                {{range.sm_users}}
-                <div class="row px-3 align-username-center sm_users-username editing rounded">
-                    <div class="col px-1 m-1 d-flex align-username-center">
+                <!-- Sm_users Username-->
+                {{range.Sm_users}}
+                <div class="row px-3 align-items-center sm_users-username editing rounded">
+                    <div class="col px-1 m-1 d-flex align-items-center">
                         <input type="text"
                             class="form-control form-control-lg border-0 edit-sm_users-input bg-transparent rounded px-3 d-none"
                             readonly value="{{.}}" title="{{.}}" />
@@ -63,7 +63,7 @@
                     <div class="col-auto m-1 p-0 px-3 d-none">
                     </div>
                     <div class="col-auto m-1 p-0 sm_users-actions">
-                        <div class="row d-flex align-username-center justify-content-end">
+                        <div class="row d-flex align-items-center justify-content-end">
                             <h5 class="m-0 p-0 px-2">
                                 <i onclick="updateDb('{{.}}')" class="fa fa-pencil text-warning btn m-0 p-0"
                                     data-toggle="tooltip" data-placement="bottom" title="Edit sm_users"></i>

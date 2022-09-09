@@ -6,24 +6,11 @@ import (
 	"log"
 	"os"
 
-	_ "go-swag-demo-api/docs"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
 	"github.com/gofiber/template/html"
 	_ "github.com/lib/pq"
 )
-
-// @title Fiber API
-// @version 1.0
-// @description This is a sample swagger for Fiber
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email fiber@swagger.io
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:3000
-// @BasePath /
 
 func main() {
 
@@ -88,43 +75,30 @@ func indexHandler(c *fiber.Ctx, db *sql.DB) error {
 	if err != nil {
 		log.Fatalln(err)
 		c.JSON("An error occured")
-		defer db.Close()
 	}
 	for rows.Next() {
 		rows.Scan(&res)
 		sm_users = append(sm_users, res)
 	}
 	return c.Render("index", fiber.Map{
-		"sm_users": sm_users,
+		"Sm_users": sm_users,
 	})
 }
 
 type sm_users struct {
-	username string
+	Username string
 }
 
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example
-// @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} Helloworld
-// @Router /api/postHandler [post]
-
 func postHandler(c *fiber.Ctx, db *sql.DB) error {
-	newsm_users := sm_users{}
-	if err := c.BodyParser(&newsm_users); err != nil {
+	newSm_users := sm_users{}
+	if err := c.BodyParser(&newSm_users); err != nil {
 		log.Printf("An error occured: %v", err)
 
 		return c.SendString(err.Error())
 	}
-	fmt.Printf("%v", newsm_users)
-	if newsm_users.username != "" {
-		_, err := db.Exec("INSERT into sm_users VALUES ($1)", newsm_users.username)
+	fmt.Printf("%v", newSm_users)
+	if newSm_users.Username != "" {
+		_, err := db.Exec("INSERT into sm_users VALUES ($1)", newSm_users.Username)
 		if err != nil {
 			log.Fatalf("An error occured while executing query: %v", err)
 		}
@@ -133,36 +107,13 @@ func postHandler(c *fiber.Ctx, db *sql.DB) error {
 	return c.Redirect("/")
 }
 
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example
-// @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} Helloworld
-// @Router /api/postHandler [get]
 func putHandler(c *fiber.Ctx, db *sql.DB) error {
-	oldusername := c
-	c.Query("oldusername")
+	oldusername := c.Query("oldusername")
 	newusername := c.Query("newusername")
-	db.Exec("UPDATE sm_userss SET username=$1 WHERE username=$2", newusername, oldusername)
+	db.Exec("UPDATE sm_users SET username=$1 WHERE username=$2", newusername, oldusername)
 	return c.Redirect("/")
 }
 
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example
-// @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} Helloworld
-// @Router /api/postHandler [post]
 func deleteHandler(c *fiber.Ctx, db *sql.DB) error {
 	sm_usersToDelete := c.Query("username")
 	db.Exec("DELETE from sm_users WHERE username=$1", sm_usersToDelete)
